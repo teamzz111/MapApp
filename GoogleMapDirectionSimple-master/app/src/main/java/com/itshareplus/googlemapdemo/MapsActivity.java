@@ -63,7 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-
+    //validación de los campos
     private void sendRequest() {
         String origin = etOrigin.getText().toString();
         String destination = etDestination.getText().toString();
@@ -84,6 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
+    //localizacion inicial del mapa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng hcmus = new LatLng(10.762963, 106.682394);
@@ -107,9 +108,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     @Override
+    //Loading encontrando ruta
     public void onDirectionFinderStart() {
         progressDialog = ProgressDialog.show(this, "Please wait.",
-                "Finding direction..!", true);
+                "Finding the route.", true);
 
         if (originMarkers != null) {
             for (Marker marker : originMarkers) {
@@ -129,7 +131,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
-
+    //tazo de ruta
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
         progressDialog.dismiss();
