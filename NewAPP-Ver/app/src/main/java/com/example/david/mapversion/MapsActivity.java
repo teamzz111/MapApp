@@ -12,13 +12,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500; //solicitud de localizacion
+    ArrayList<LatLng> ListPoints; //inicializacion de lista de los puntos en el mapa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +31,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        ListPoints = new ArrayList<>();
     }
 
 
@@ -51,6 +56,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         mMap.setMyLocationEnabled(true);
+
+        //OnMapLongClickListener
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                // limpiar el marcador cuando ya hayan 2
+                if(ListPoints.size() == 2){
+                    ListPoints.clear();
+                    mMap.clear();
+                }
+
+                //guardar el primero punto creado
+                ListPoints.add(latLng);
+
+                //crear el marcador
+                MarkerOptions marker = new MarkerOptions();
+                marker.position(latLng);
+
+                // condicion para crear el primer marcador
+                if(ListPoints.size() == 1){
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory. HUE_RED)); // crar marcador de color rojo
+                }
+                else {
+                    // crear el segundo marcador
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                }
+                mMap.addMarker(marker);
+            }
+        });
 
 
 
